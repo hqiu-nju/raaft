@@ -1,0 +1,10 @@
+{% if FRB_info %}
+Latest FRBs
+    <ul>
+    {% for TransientEntry in FRB_info %}
+        <li><a href="/candidates/{{ TransientEntry.id }}/">{{ TransientEntry.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No FRBs are available.</p>
+{% endif %}

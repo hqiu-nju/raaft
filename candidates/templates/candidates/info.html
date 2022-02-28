@@ -1,0 +1,12 @@
+You're looking at the additional info of FRB {{question.frb_name}}
+{% for choice in question.add_info_set.all %}
+    <li>Type: {{ choice.type }}</li>
+      <ul>{{ choice.choice_text }}</ul>
+{% endfor %}
+Verification History
+<ul>
+{% for choice in question.verification_set.all %}
+    <li>Checked as {{ choice.verify }} on {{ choice.pub_date}}  by {{choice.username}}</li>
+
+{% endfor %}
+</ul>

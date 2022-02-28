@@ -1,0 +1,39 @@
+<h1>{{ question.name }}</h1>
+<p>Dispersion Measure: {{ question.dm }}</p>
+<p>S/N: {{ question.sn }}</p>
+<p>Boxcar: {{ question.width_value}}</p>
+<p>MJD: {{ question.mjd}}</p>
+
+<ul>
+{% for choice in question.localisation_set.all %}
+    <li>Localisation from {{ choice.version }}</li>
+    <ul><li>Right Ascension:{{ choice.RA }}</li></ul>
+    <ul><li>Declination:{{ choice.Dec }}</li></ul>
+{% endfor %}
+</ul>
+{% for choice in latest_verify %}
+Checked as {{ choice.verify }} because of {{choice.reason}} on {{ choice.pub_date}} by {{choice.username}}
+{% endfor %}
+<p>
+Additional info of FRB {{question.name}}
+{% for choice in question.properties_set.all %}
+    <li>Date: {{ choice.pub_date }}</li>
+      <ul>{{ choice.choice_text }}</ul>
+{% endfor %}
+</p>
+Verification History
+<ul>
+{% for choice in question.verification_set.all %}
+    <li>Checked as {{ choice.verify }} on {{ choice.pub_date}}  by {{choice.username}}</li>
+
+{% endfor %}
+</ul>
+Multimessenger information
+<ul>
+{% for choice in question.multimessenger_set.all %}
+    <li>Checked as {{ choice.choice_text }} on {{ choice.pub_date}}  by {{choice.username}}</li>
+    <ul>Right Ascension{{ choice.RA }} ± {{ choice.ra_err }}</ul>
+    <ul>Declination {{ choice.Dec }} ± {{ choice.dec_err }}</ul>
+
+{% endfor %}
+</ul>

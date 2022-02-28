@@ -1,0 +1,3 @@
+# S/N, sampno, secs from file start, boxcar, idt, dm, beamno, mjd, latency_ms
+19.54 143537 248.0319 1 263 323.79 13 58645.2400858910 413.29
+# total_cand: 1969
