@@ -1,6 +1,6 @@
 # RAAFT
 
-A Django based SQL-storage server for CRAFT/CRACO candidate processing and information exchange
+A Django based SQL-storage server for CRAFT/CRACO candidate processing and information exchange with slack
 
 To Run: 
     python manage.py runserver
