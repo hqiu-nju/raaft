@@ -98,11 +98,20 @@ def mma_updates(request):
         pub_date=timezone.now(),
         username=data['username'],
         choice_text=data['choice_text'],
-        RA=data['ra'],
-        Dec=data['dec'],
+        ra=data['ra'],
+        dec=data['dec'],
         ra_err=data['ra_err'],
         dec_err=data['dec_err'],
         upload=f"{data['name']}/{filename}",
         )
         newobject.save()
         return HttpResponse("New counterpart added")
+def slack(request):
+    # read slack interactive messages
+    # print(str(request.body))
+    # print(str(request.META['CONTENT_TYPE']))
+    if 'x-www-form-urlencoded' in request.META['CONTENT_TYPE']:
+        data = json.loads(request.POST['payload'])
+        user=data['user']['username']
+        print(f"{user} sent the message through slack!")
+    return HttpResponse('Success')

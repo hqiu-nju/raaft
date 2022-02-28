@@ -10,7 +10,7 @@ urlpatterns = [
     path('newcand/', views.add_candidate, name='newcand'),
     path('veto/', views.veto, name='veto'),
     path('mma/', views.mma_updates, name='Multimessenger Update'),
-
+    path('slack/',views.slack,name='Slack response handler'),
     ####
     path('<int:question_id>/', views.detail, name='detail')
 ]

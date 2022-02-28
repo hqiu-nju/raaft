@@ -26,6 +26,9 @@ class TransientEntry(models.Model):
     width_value = models.FloatField("Pulse Width (ms)")
     mjd = models.FloatField("MJD")
     latency_ms = models.FloatField("Latency(ms)")
+    # centre_frequency=models.FloatField("Frequency (MHz)",blank=True)
+    ra = models.FloatField('Right Asension',blank=True)
+    dec = models.FloatField("Declination",blank=True)
     #RA= models.FloatField("MJD")
     ## link latest verification
     def __str__(self):
@@ -59,8 +62,8 @@ class Multimessenger(models.Model):
     pub_date = models.DateTimeField('date published',default=timezone.now)
     choice_text = models.CharField('Info',max_length=200)
     username=models.CharField(default='Anonymous',max_length=20)
-    RA = models.FloatField('Right Asension',blank=True)
-    Dec = models.FloatField("Declination",blank=True)
+    ra = models.FloatField('Right Asension',blank=True)
+    dec = models.FloatField("Declination",blank=True)
     ra_err = models.FloatField('RA err',blank=True)
     dec_err = models.FloatField('Dec err',blank=True)
     upload = models.FileField('Uploaded File',upload_to='uploads/',blank=True)
