@@ -26,9 +26,9 @@ class TransientEntry(models.Model):
     width_value = models.FloatField("Pulse Width (ms)")
     mjd = models.FloatField("MJD")
     latency_ms = models.FloatField("Latency(ms)")
-    # centre_frequency=models.FloatField("Frequency (MHz)",blank=True)
-    ra = models.FloatField('Right Asension',blank=True)
-    dec = models.FloatField("Declination",blank=True)
+    # centre_frequency=models.FloatField("Frequency (MHz)",default=1000)
+    # ra = models.FloatField('Right Asension',blank=True,null=True)
+    # dec = models.FloatField("Declination",blank=True,null=True)
     #RA= models.FloatField("MJD")
     ## link latest verification
     def __str__(self):
@@ -43,14 +43,26 @@ class Properties(models.Model):
 
 class Veto(models.Model):
     frb = models.ForeignKey(TransientEntry, on_delete=models.CASCADE)
-    verify=[
-    (0,"Unverified"),
-    (1,'FRB'),
-    (2,'Pulsar'),
-    (-1,'RFI'),
-    (3,'Unknown')
+    # verifys=[
+    # (0,"Unverified"),
+    # (1,'FRB'),
+    # (2,'Pulsar'),
+    # (-1,'RFI'),
+    # (3,'Unknown')
+    # ]
+    NEW='0'
+    FRB='1'
+    PSR='2'
+    RFI='-1'
+    UNK='3'
+    verifys=[
+    (NEW,"Unverified"),
+    (FRB,'FRB'),
+    (PSR,'Pulsar'),
+    (RFI,'RFI'),
+    (UNK,'Unknown')
     ]
-    verify = models.CharField(choices=verify,default=0,max_length=20)
+    verify = models.CharField(choices=verifys,default='0',max_length=3)
     reason=models.CharField(default="",max_length=200)
     pub_date = models.DateTimeField('date published',default=timezone.now)
     username=models.CharField(default='Anonymous',max_length=20)

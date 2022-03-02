@@ -5,14 +5,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.Index, name='index'),
     ### this is for receiving the newcands, no output for browser
-    path('newcand/', views.add_candidate, name='newcand'),
-    path('veto/', views.veto, name='veto'),
-    path('mma/', views.mma_updates, name='Multimessenger Update'),
-    path('slack/',views.slack,name='Slack response handler'),
+    path('newcand/', views.AddCandidate, name='newcand'),
+    path('veto/', views.Veto, name='veto'),
+    path('mma/', views.MMAUpdates, name='Multimessenger Update'),
+    path('slack/',views.Slack,name='Slack response handler'),
     ####
-    path('<int:question_id>/', views.detail, name='detail')
+    path('<int:question_id>/', views.Detail, name='detail')
 ]
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import TransientEntry
+# from .models import TransientEntry
 # Create your views here.
 from django.template import loader
 from django.http import HttpResponse,Http404, HttpRequest
@@ -9,8 +9,11 @@ from django.utils import timezone
 from django.core.files.storage import default_storage
 import base64
 import os
-
-def index(request):
+from decouple import config
+import jsonloader
+### import SLACK_WEBHOOK for channel
+SLACK_WEBHOOK=config("SLACK_WEBHOOK")
+def Index(request):
     latest_question_list = TransientEntry.objects.order_by('-pub_date')[:100]
     template = loader.get_template('candidates/index.html')
     context = {
@@ -18,7 +21,7 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-def detail(request, question_id):
+def Detail(request, question_id):
     try:
         question = TransientEntry.objects.get(id=question_id)
     except question.DoesNotExist:
@@ -35,7 +38,7 @@ def detail(request, question_id):
 #     context={'question':question}
 #     return HttpResponse(template.render(context, request))
 
-def add_candidate(request):
+def AddCandidate(request):
     if 'application/json' in request.META['CONTENT_TYPE']:
         #print ('hi')
         data = json.loads(request.body)
@@ -63,12 +66,12 @@ def add_candidate(request):
         return HttpResponse("Success")
 
 
-def veto(request):
+def Veto(request):
     if 'application/json' in request.META['CONTENT_TYPE']:
         data = json.loads(request.body)
         #frb = data.get('frb_name', None)
         print("received",data["pub_date"])
-        new_veto=Veto(frb=data['name'],pub_date=timezone.now(),
+        new_veto=Veto(frb=TransientEntry.objects.get(name=data['name']),pub_date=timezone.now(),
         verify=data['verify'],reason=data['reason'],
         username=data['username']
         )
@@ -76,7 +79,7 @@ def veto(request):
         #frb_name.objects.create()
         return HttpResponse("Veto info added")
 
-def mma_updates(request):
+def MMAUpdates(request):
     if 'application/json' in request.META['CONTENT_TYPE']:
         data = json.loads(request.body)
         #frb = data.get('frb_name', None)
@@ -106,12 +109,67 @@ def mma_updates(request):
         )
         newobject.save()
         return HttpResponse("New counterpart added")
-def slack(request):
+def Slack(request):
     # read slack interactive messages
     # print(str(request.body))
     # print(str(request.META['CONTENT_TYPE']))
+    response={
+            	"blocks": [
+            		{
+            			"type": "context",
+            			"elements": [
+            				{
+            					"type": "plain_text",
+            					"text": "Interaction received",
+            					"emoji": True
+            				}
+            			]
+            		}
+            	]
+            }
     if 'x-www-form-urlencoded' in request.META['CONTENT_TYPE']:
         data = json.loads(request.POST['payload'])
         user=data['user']['username']
         print(f"{user} sent the message through slack!")
+        # print(data['message']['blocks'][1]['text']['text'])
+        frbname=data['message']['blocks'][1]['text']['text']
+        # entry=TransientEntry.objects.get(name=frbname)
+        print(frbname)
+        # print(TransientEntry.objects.get(name=frbname))
+        if data["actions"][0]['action_id']=='actionId-0':
+            # print('veto!')
+
+            response['blocks'].append(
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "plain_text",
+                        "text": "Veto applied",
+                        "emoji": True
+                    }
+                ]
+            }
+            )
+            # new_veto=Veto(frb = entry,
+            # pub_date=timezone.now(),
+            # verify="1",reason="slack visual check",
+            # username=user
+            # )
+            # new_veto.save()
+        else:
+            response['blocks'].append(
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "plain_text",
+                        "text": "Veto rejected",
+                        "emoji": True
+                    }
+                ]
+            }
+            )
+        jsonloader.poster(SLACK_WEBHOOK,response)
+
     return HttpResponse('Success')

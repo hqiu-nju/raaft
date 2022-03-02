@@ -60,6 +60,7 @@ def vetojson(frb,choice,reason='',username='raaftbot'):
     'reason':reason,
     'username':username,
     }
+    return vetos
 
 def poster(url,jsonfile):
     """super vanilla json posting function for both django and slack
@@ -92,6 +93,7 @@ class SlackRaaft:
         # self.mjd=info['mjd']
         # self.latency_ms=info['latency']
         self.snoopy2=info
+        self.url=url
     def CreateVetoBlock(self,image="https://assets3.thrillist.com/v1/image/1682388/size/tl-horizontal_main.jpg"):
         """initiate function for starting a slack upload with raaft.
         Parameters
@@ -99,51 +101,69 @@ class SlackRaaft:
         image : str
             url of image
         """
-        payload={
-                	"blocks": [
-                		{
-                			"type": "header",
-                			"text": {
-                				"type": "plain_text",
-                				"text": "New Candidate",
-                				"emoji": true
-                			}
-                		},
-                		{
-                			"type": "image",
-                			"title": {
-                				"type": "plain_text",
-                				"text": "FRB waterfall",
-                				"emoji": true
-                			},
-                			"image_url": "https://assets3.thrillist.com/v1/image/1682388/size/tl-horizontal_main.jpg",
-                			"alt_text": "marg"
-                		},
-                		{
-                			"type": "actions",
-                			"elements": [
-                				{
-                					"type": "button",
-                					"text": {
-                						"type": "plain_text",
-                						"text": "Confirm",
-                						"emoji": true
-                					},
-                					"value": "click_me_123",
-                					"action_id": "actionId-0"
-                				}
-                			]
-                		}
-                	]
-                }
+        payload = {
+            	"blocks": [
+            		{
+            			"type": "header",
+            			"text": {
+            				"type": "plain_text",
+            				"text": "New Candidate",
+            				"emoji": True
+            			}
+            		},
+            		{
+            			"type": "header",
+            			"text": {
+            				"type": "plain_text",
+            				"text": self.name,
+            				"emoji": True
+            			}
+            		},
+            		{
+            			"type": "image",
+            			"title": {
+            				"type": "plain_text",
+            				"text": "FRB waterfall",
+            				"emoji": True
+            			},
+            			"image_url": "https://assets3.thrillist.com/v1/image/1682388/size/tl-horizontal_main.jpg",
+            			"alt_text": "marg"
+            		},
+            		{
+            			"type": "actions",
+            			"elements": [
+            				{
+            					"type": "button",
+            					"text": {
+            						"type": "plain_text",
+            						"text": "Confirm",
+            						"emoji": True
+            					},
+            					"value": "click_me_123",
+            					"action_id": "actionId-0"
+            				},
+            				{
+            					"type": "button",
+            					"text": {
+            						"type": "plain_text",
+            						"text": "False",
+            						"emoji": True
+            					},
+            					"value": "click_me_123",
+            					"action_id": "actionId-1"
+            				}
+            			]
+            		}
+            	]
+            }
         # self.vetopayload=payload
         return payload
     def CreateCounterpartBlock(self,image):
 
         return payload
 
-    def push(self,url,payload):
-        poster(url,payload)
+    def push(self,payload):
+        poster(self.url,payload)
 
 
 
@@ -166,6 +186,6 @@ class SlackRaaft:
     'ra_err':1,
     'dec_err':1,
     }
-
+    newvetp=
 
 """
