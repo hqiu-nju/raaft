@@ -1,4 +1,4 @@
-import jsonloader
+import taco
 import requests
 import json
 import pytz
@@ -20,7 +20,7 @@ SLACK_WEBHOOK=config("SLACK_WEBHOOK")
 
 
 newfrb=jsonloader.snoopy2dict("testsnoopy.txt",'test_entry_2022')
-newnote=jsonloader.SlackRaaft(newfrb,SLACK_WEBHOOK)
+newnote=jsonloader.Taco(newfrb,SLACK_WEBHOOK)
 
 blocks=newnote.CreateVetoBlock()
 push=newnote.push(blocks)

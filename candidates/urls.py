@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.Index, name='index'),
     ### this is for receiving the newcands, no output for browser
     path('newcand/', views.AddCandidate, name='newcand'),
-    path('veto/', views.Veto, name='veto'),
+    path('veto/', views.GetVeto, name='veto'),
     path('mma/', views.MMAUpdates, name='Multimessenger Update'),
     path('slack/',views.Slack,name='Slack response handler'),
     ####

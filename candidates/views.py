@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 import base64
 import os
 from decouple import config
-import jsonloader
+import taco
 ### import SLACK_WEBHOOK for channel
 SLACK_WEBHOOK=config("SLACK_WEBHOOK")
 def Index(request):
@@ -66,7 +66,7 @@ def AddCandidate(request):
         return HttpResponse("Success")
 
 
-def Veto(request):
+def GetVeto(request):
     if 'application/json' in request.META['CONTENT_TYPE']:
         data = json.loads(request.body)
         #frb = data.get('frb_name', None)
